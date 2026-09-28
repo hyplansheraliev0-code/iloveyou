@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Арген & Даша ❤️</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+    font-family:Arial,sans-serif;
+    background:radial-gradient(circle at top,#3b1028 0%,#160817 45%,#080308 100%);
+    color:white;overflow-x:hidden
+}
+.start-screen{
+    position:fixed;inset:0;display:flex;align-items:center;justify-content:center;
+    text-align:center;background:radial-gradient(circle at center,#521538,#170817 55%,#070207);
+    z-index:1000;transition:opacity 1.2s ease,visibility 1.2s ease
+}
+.start-screen.hide{opacity:0;visibility:hidden}
+.start-content{padding:30px;animation:startAppear 1.5s ease}
+.start-content h1{font-size:clamp(32px,8vw,65px);margin-bottom:20px;text-shadow:0 0 20px rgba(255,80,150,.8),0 0 50px rgba(255,40,120,.5)}
+.start-content p{font-size:18px;opacity:.85;margin-bottom:35px;line-height:1.6}
+.open-button{
+    border:0;padding:18px 38px;border-radius:50px;background:linear-gradient(135deg,#ff3d81,#ff6ba5);
+    color:white;font-size:17px;font-weight:bold;cursor:pointer;box-shadow:0 10px 35px rgba(255,40,120,.45);transition:.3s
+}
+.open-button:hover{transform:scale(1.08)} .open-button:active{transform:scale(.95)}
+.content{opacity:0;visibility:hidden;transition:opacity 1.5s ease,visibility 1.5s ease}
+.content.show{opacity:1;visibility:visible}
+.hero{
+    min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    text-align:center;padding:40px 20px;position:relative
+}
+.hero h1{
+    font-size:clamp(45px,11vw,100px);
+    background:linear-gradient(135deg,#fff,#ff8fba,#ff3d81);
+    -webkit-background-clip:text;color:transparent;margin-bottom:20px;animation:titleGlow 4s infinite alternate
+}
+.hero p{font-size:18px;opacity:.75}.hero-heart{font-size:60px;margin-bottom:20px;animation:heartbeat 1.5s infinite}
+.story-container{width:min(900px,92%);margin:auto}
+.story{
+    margin:100px 0;padding:40px 30px;border-radius:30px;
+    background:linear-gradient(145deg,rgba(255,255,255,.08),rgba(255,255,255,.025));
+    border:1px solid rgba(255,255,255,.1);box-shadow:0 25px 70px rgba(0,0,0,.35);
+    backdrop-filter:blur(10px);opacity:0;transform:translateY(70px);
+    transition:opacity 1.2s ease,transform 1.2s cubic-bezier(.2,.8,.2,1)
+}
+.story.visible{opacity:1;transform:translateY(0)}
+.story h2{font-size:clamp(25px,5vw,38px);margin-bottom:25px;color:#ff9fc3}
+.story p{font-size:18px;line-height:1.9;color:rgba(255,255,255,.88);margin-bottom:15px}
+.highlight{color:#ff8fb8;font-weight:bold}
+.date{display:inline-block;margin-bottom:15px;padding:7px 15px;border-radius:30px;background:rgba(255,80,140,.15);color:#ff9fc3;font-size:14px}
+.video-section{margin:100px auto;width:min(850px,92%);text-align:center}
+.video-title{font-size:clamp(28px,6vw,42px);color:#ff9fc3;margin-bottom:15px}
+.video-description{opacity:.7;margin-bottom:30px}
+.video-container{position:relative;overflow:hidden;border-radius:30px;background:#000;box-shadow:0 30px 80px rgba(0,0,0,.6);cursor:pointer}
+.video-container video{display:block;width:100%;height:auto;max-height:700px;object-fit:contain}
+.video-hint{
+    position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:80px;height:80px;
+    border-radius:50%;display:flex;align-items:center;justify-content:center;
+    background:rgba(255,70,140,.85);font-size:30px;padding-left:5px;
+    box-shadow:0 0 40px rgba(255,60,140,.5);transition:.4s;pointer-events:none
+}
+.video-container.playing .video-hint{opacity:0}
+.photos-section{width:min(900px,92%);margin:150px auto 100px;text-align:center}
+.photos-title{font-size:clamp(30px,7vw,48px);color:#ff9fc3;margin-bottom:15px}
+.photos-subtitle{opacity:.7;margin-bottom:60px;font-size:17px}
+.photo-gallery{display:flex;flex-direction:column;gap:50px}
+.photo{
+    width:100%;max-width:700px;margin:0 auto;display:block;border-radius:28px;
+    box-shadow:0 25px 80px rgba(0,0,0,.55);opacity:0;
+    transform:translateY(100px) scale(.82);filter:blur(6px);
+    transition:opacity 1.2s ease,transform 1.3s cubic-bezier(.2,.8,.2,1),filter 1.2s ease
+}
+.photo.visible{opacity:1;transform:translateY(0) scale(1);filter:blur(0)}
+.photo:hover{transform:scale(1.02)}
+.final{
+    min-height:90vh;display:flex;flex-direction:column;justify-content:center;align-items:center;
+    text-align:center;padding:80px 25px
+}
+.final h2{font-size:clamp(38px,9vw,75px);color:#ff8fb8;margin-bottom:35px;text-shadow:0 0 30px rgba(255,70,140,.5)}
+.final p{max-width:750px;font-size:19px;line-height:2;opacity:.9;margin-bottom:20px}
+.final-love{margin-top:40px;font-size:clamp(35px,8vw,65px);font-weight:bold;color:#ff5c9b;animation:heartbeat 1.8s infinite}
+.signature{margin-top:30px;opacity:.6;font-size:17px}
+.floating-heart{position:fixed;bottom:-50px;pointer-events:none;z-index:2;animation:floatHeart linear forwards}
+@keyframes floatHeart{
+    0%{transform:translateY(0) rotate(0deg);opacity:0}
+    10%{opacity:.8}
+    100%{transform:translateY(-110vh) rotate(360deg);opacity:0}
+}
+@keyframes heartbeat{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}
+@keyframes titleGlow{from{filter:drop-shadow(0 0 5px rgba(255,80,140,.3))}to{filter:drop-shadow(0 0 25px rgba(255,80,140,.7))}}
+@keyframes startAppear{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:600px){
+    .story{padding:30px 22px;margin:70px 0;border-radius:24px}
+    .story p{font-size:16px;line-height:1.8}
+    .hero{min-height:90vh}.video-container{border-radius:22px}
+    .video-hint{width:65px;height:65px;font-size:24px}.photo{border-radius:22px}
+}
+</style>
+</head>
+<body>
+
+<div class="start-screen" id="start">
+    <div class="start-content">
+        <h1>Для Даши ❤️</h1>
+        <p>Я хочу показать тебе<br>одну маленькую историю...</p>
+        <button class="open-button" onclick="openStory()">ОТКРЫТЬ ❤️</button>
+    </div>
+</div>
+
+<audio id="music" src="music.mp3" loop></audio>
+
+<div class="content" id="content">
+
+<section class="hero">
+    <div class="hero-heart">❤️</div>
+    <h1>Арген & Даша</h1>
+    <p>История, которая началась в 2022 году и продолжается до сих пор...</p>
+</section>
+
+<div class="story-container">
+
+<section class="story">
+    <span class="date">2022</span>
+    <h2>💬 Всё началось</h2>
+    <p>Мы познакомились в <span class="highlight">«Дайвинчике»</span> в Telegram.</p>
+    <p>И самое интересное — первой мне написала ты.</p>
+    <p>Тогда я даже представить не мог, насколько важным человеком ты станешь для меня.</p>
+    <p>Сначала я думал, что ты просто весёлая девочка, с которой можно пообщаться какое-то время.</p>
+    <p>Но между нами почти сразу появилась какая-то особенная связь.</p>
+</section>
+
+<section class="story">
+    <h2>🌿 Наша первая встреча</h2>
+    <p>Наша первая встреча произошла на острове Татышев.</p>
+    <p>Я купил тебе шоколад, но пока ехал — он растаял. Уже тогда всё пошло немного не по плану 😅</p>
+    <p>Ты была очень стеснительной, милой и настоящей.</p>
+    <p>Мы гуляли, разговаривали, я угостил тебя напитком.</p>
+    <p>Именно тогда я понял, что ты мне действительно нравишься.</p>
+    <p>Ты была первой девушкой, с которой я просто гулял один на один.</p>
+</section>
+
+<section class="story">
+    <h2>🌧 Последняя прогулка</h2>
+    <p>Перед моим отъездом мы снова гуляли возле твоего дома.</p>
+    <p>На улице была огромная лужа, и я просто поднял тебя и перенёс через неё.</p>
+    <p>А потом случился наш первый поцелуй.</p>
+    <p>Он получился неожиданным, немного неловким и кривым... но именно поэтому я его до сих пор помню. ❤️</p>
+</section>
+
+<section class="story">
+    <span class="date">5 сентября 2023</span>
+    <h2>💔 Мы расстались</h2>
+    <p>5 сентября 2023 года наши отношения закончились.</p>
+    <p>Я стал холоднее и постепенно потерял интерес к общению на расстоянии.</p>
+    <p>Тогда мне казалось, что это конец нашей истории.</p>
+    <p>Но я ошибался.</p>
+</section>
+
+<section class="story">
+    <h2>⏳ После этого прошло время</h2>
+    <p>Прошло много времени.</p>
+    <p>Иногда я вспоминал тебя, скучал и говорил другу о том, насколько сильно всё ещё тебя люблю.</p>
+    <p>Иногда мне было больно видеть, что рядом с тобой появился другой человек.</p>
+    <p>Но где-то внутри меня ты всё равно оставалась.</p>
+</section>
+
+<section class="story">
+    <span class="date">2025</span>
+    <h2>❤️ Мы начали встречаться</h2>
+    <p>А потом наступил <span class="highlight">2025 год</span>.</p>
+    <p>Именно в этом году наша история перешла в отношения.</p>
+    <p>После всего, что между нами произошло, мы снова оказались рядом друг с другом.</p>
+    <p>И на этот раз всё ощущалось совсем иначе.</p>
+</section>
+
+<section class="story">
+    <span class="date">2 августа 2025</span>
+    <h2>💕 2 августа 2025</h2>
+    <p>Именно этот день стал особенным для нас.</p>
+    <p>Мы начали встречаться.</p>
+    <p>После всего нашего прошлого, всех воспоминаний, расстояния и времени — мы снова выбрали друг друга.</p>
+    <p>И с этого момента началась новая глава нашей истории.</p>
+</section>
+
+</div>
+
+<section class="video-section">
+    <h2 class="video-title">🎬 Один из наших моментов</h2>
+    <p class="video-description">Нажми на видео ❤️</p>
+    <div class="video-container" id="videoContainer">
+        <video id="myVideo" src="video.mp4" playsinline preload="metadata"></video>
+        <div class="video-hint">▶</div>
+    </div>
+</section>
+
+<div class="story-container">
+
+<section class="story">
+    <h2>🐱 Киса. Зая.</h2>
+    <p>Так появились наши маленькие имена друг для друга.</p>
+    <p>Киса.</p>
+    <p>Зая.</p>
+    <p>Простые слова, которые почему-то значат для меня очень много.</p>
+</section>
+
+<section class="story">
+    <h2>🌍 Сейчас</h2>
+    <p>Сейчас мы снова можем быть далеко друг от друга.</p>
+    <p>Учёба, расстояние, разные дела и обстоятельства иногда не позволяют нам быть рядом столько, сколько хочется.</p>
+    <p>Но расстояние не меняет того, что я чувствую.</p>
+    <p>Я очень сильно скучаю по тебе.</p>
+    <p>И несмотря ни на что, я очень сильно тебя люблю.</p>
+</section>
+
+<section class="story">
+    <h2>♾️ Наше будущее</h2>
+    <p>Я представляю наше будущее очень простым и счастливым.</p>
+    <p>Наш дом.</p>
+    <p>Наша семья.</p>
+    <p>Возможно, двое или трое детей.</p>
+    <p>Я хочу, чтобы наши дети росли и видели, как сильно их родители любят друг друга.</p>
+    <p>Чтобы в нашем доме было много смеха, тепла, объятий и счастливых моментов.</p>
+    <p>Я хочу прожить эту жизнь именно с тобой.</p>
+</section>
+
+<section class="story">
+    <h2>❤️ Если меня спросят...</h2>
+    <p>Если меня когда-нибудь спросят, почему именно ты, я не смогу дать один конкретный ответ.</p>
+    <p>Потому что мне нравится в тебе всё.</p>
+    <p>Твоя простота. Твоя милота. Твоя искренность. Твой характер. Твой смех. Твоя забота.</p>
+    <p>Даже моменты, когда ты меня злишь, всё равно не меняют того, что я тебя люблю.</p>
+</section>
+
+</div>
+
+<section class="photos-section">
+    <h2 class="photos-title">📸 Наши моменты</h2>
+    <p class="photos-subtitle">Самые дорогие воспоминания ❤️</p>
+    <div class="photo-gallery">
+        <img src="photo1.jpeg" class="photo" alt="Наш момент">
+        <img src="photo2.jpeg" class="photo" alt="Наш момент">
+        <img src="photo3.jpeg" class="photo" alt="Наш момент">
+        <img src="photo4.jpeg" class="photo" alt="Наш момент">
+        <img src="photo5.jpeg" class="photo" alt="Наш момент">
+        <img src="photo6.jpeg" class="photo" alt="Наш момент">
+        <img src="photo7.jpeg" class="photo" alt="Наш момент">
+        <img src="photo8.jpeg" class="photo" alt="Наш момент">
+    </div>
+</section>
+
+<section class="final">
+    <h2>Даша ❤️</h2>
+    <p>Несмотря ни на что, я очень сильно тебя люблю.</p>
+    <p>И никто не сможет изменить моего мнения о тебе.</p>
+    <p>Я хочу, чтобы наша история продолжалась ещё очень долго.</p>
+    <p>Чтобы однажды мы проснулись в нашем собственном доме, посмотрели друг на друга и поняли, что всё это было только началом.</p>
+    <p>Чтобы рядом были наши дети, которые будут видеть, как сильно их родители любят друг друга.</p>
+    <p>И если 2022 год был началом нашей истории, то 2025 год стал годом, когда мы выбрали друг друга снова.</p>
+    <div class="final-love">Я ТЕБЯ ЛЮБЛЮ ❤️</div>
+    <div class="signature">Арген & Даша<br>2022 → ∞</div>
+</section>
+
+</div>
+
+<script>
+const start=document.getElementById("start");
+const content=document.getElementById("content");
+const music=document.getElementById("music");
+const video=document.getElementById("myVideo");
+const videoContainer=document.getElementById("videoContainer");
+
+function openStory(){
+    start.classList.add("hide");
+    content.classList.add("show");
+    music.volume=.55;
+    music.play().catch(()=>{});
+    createHearts();
+    setTimeout(()=>{start.style.display="none"},1200);
+    checkScroll();
+}
+
+function checkScroll(){
+    document.querySelectorAll(".story").forEach(story=>{
+        if(story.getBoundingClientRect().top<window.innerHeight*.85)
+            story.classList.add("visible");
+    });
+    document.querySelectorAll(".photo").forEach(photo=>{
+        if(photo.getBoundingClientRect().top<window.innerHeight*.88)
+            photo.classList.add("visible");
+    });
+}
+window.addEventListener("scroll",checkScroll);
+window.addEventListener("load",checkScroll);
+
+function createHearts(){
+    const symbols=["❤️","💕","💗","💖","✨"];
+    setInterval(()=>{
+        const heart=document.createElement("div");
+        heart.className="floating-heart";
+        heart.innerHTML=symbols[Math.floor(Math.random()*symbols.length)];
+        heart.style.left=Math.random()*100+"vw";
+        heart.style.fontSize=(12+Math.random()*20)+"px";
+        heart.style.animationDuration=(5+Math.random()*5)+"s";
+        document.body.appendChild(heart);
+        setTimeout(()=>heart.remove(),10000);
+    },600);
+}
+
+function fadeMusic(from,to,duration){
+    const startTime=performance.now();
+    function animate(time){
+        const progress=Math.min((time-startTime)/duration,1);
+        music.volume=from+(to-from)*progress;
+        if(progress<1)requestAnimationFrame(animate);
+    }
+    requestAnimationFrame(animate);
+}
+
+video.addEventListener("play",()=>{
+    videoContainer.classList.add("playing");
+    fadeMusic(music.volume,.06,700);
+});
+
+video.addEventListener("pause",()=>{
+    if(!video.ended){
+        videoContainer.classList.remove("playing");
+        fadeMusic(music.volume,.55,700);
+    }
+});
+
+video.addEventListener("ended",()=>{
+    videoContainer.classList.remove("playing");
+    fadeMusic(music.volume,.55,1200);
+});
+
+videoContainer.addEventListener("click",()=>{
+    if(video.paused) video.play().catch(()=>{});
+    else video.pause();
+});
+</script>
+</body>
+</html>
